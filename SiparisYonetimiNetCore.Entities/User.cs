@@ -21,7 +21,7 @@ namespace SiparisYonetimiNetCore.Entities
         public bool IsActive { get; set; }
         [Display(Name = "Admin")]
         public bool IsAdmin { get; set; }
-        [Display(Name = "Eklenme Tarihi")]
+        [Display(Name = "Eklenme Tarihi"), ScaffoldColumn(false)]
         public DateTime? CreateDate { get; set; } = DateTime.Now;
     }
 }

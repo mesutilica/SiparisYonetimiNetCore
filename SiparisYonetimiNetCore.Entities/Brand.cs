@@ -13,7 +13,7 @@ namespace SiparisYonetimiNetCore.Entities
         public string? Description { get; set; }
         [Display(Name = "Durum")]
         public bool IsActive { get; set; }
-        [Display(Name = "Eklenme Tarihi")]
+        [Display(Name = "Eklenme Tarihi"), ScaffoldColumn(false)] // view larda bu kolon oluşmasın!
         public DateTime? CreateDate { get; set; } = DateTime.Now;
         public virtual List<Product>? Products { get; set; }
     }
