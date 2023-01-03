@@ -1,48 +1,49 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using SiparisYonetimiNetCore.Entities;
 using SiparisYonetimiNetCore.Service.Abstract;
 
 namespace SiparisYonetimiNetCore.WebUI.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class ContactsController : Controller
+    public class CustomersController : Controller
     {
-        private readonly IService<Contact> _service;
+        private readonly IService<Customer> _service;
 
-        public ContactsController(IService<Contact> service)
+        public CustomersController(IService<Customer> service)
         {
             _service = service;
         }
 
-        // GET: ContactsController
+        // GET: CustomersController
         public async Task<ActionResult> Index()
         {
             var model = await _service.GetAllAsync();
             return View(model);
         }
 
-        // GET: ContactsController/Details/5
+        // GET: CustomersController/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: ContactsController/Create
+        // GET: CustomersController/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: ContactsController/Create
+        // POST: CustomersController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> CreateAsync(Contact contact)
+        public async Task<ActionResult> CreateAsync(Customer customer)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    await _service.AddAsync(contact);
+                    await _service.AddAsync(customer);
                     await _service.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
@@ -51,26 +52,26 @@ namespace SiparisYonetimiNetCore.WebUI.Areas.Admin.Controllers
                     ModelState.AddModelError("", "Hata Oluştu!");
                 }
             }
-            return View(contact);
+            return View(customer);
         }
 
-        // GET: ContactsController/Edit/5
+        // GET: CustomersController/Edit/5
         public ActionResult Edit(int id)
         {
             var model = _service.Find(id);
             return View(model);
         }
 
-        // POST: ContactsController/Edit/5
+        // POST: CustomersController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> EditAsync(int id, Contact contact)
+        public async Task<ActionResult> EditAsync(int id, Customer customer)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _service.Update(contact);
+                    _service.Update(customer);
                     await _service.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
@@ -79,24 +80,24 @@ namespace SiparisYonetimiNetCore.WebUI.Areas.Admin.Controllers
                     ModelState.AddModelError("", "Hata Oluştu!");
                 }
             }
-            return View(contact);
+            return View(customer);
         }
 
-        // GET: ContactsController/Delete/5
+        // GET: CustomersController/Delete/5
         public ActionResult Delete(int id)
         {
             var model = _service.Find(id);
             return View(model);
         }
 
-        // POST: ContactsController/Delete/5
+        // POST: CustomersController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, Contact contact)
+        public ActionResult Delete(int id, Customer customer)
         {
             try
             {
-                _service.Delete(contact);
+                _service.Delete(customer);
                 _service.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }

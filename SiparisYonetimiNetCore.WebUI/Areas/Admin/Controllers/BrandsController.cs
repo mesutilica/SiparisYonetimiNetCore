@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SiparisYonetimiNetCore.Entities;
 using SiparisYonetimiNetCore.Service.Abstract;
 using SiparisYonetimiNetCore.WebUI.Utils;
