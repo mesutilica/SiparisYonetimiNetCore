@@ -3,6 +3,7 @@ using SiparisYonetimiNetCore.Data.Abstract;
 using SiparisYonetimiNetCore.Data.Concrete;
 using SiparisYonetimiNetCore.Service.Abstract;
 using SiparisYonetimiNetCore.Service.Concrete;
+using Microsoft.AspNetCore.Authentication.Cookies; // Admin giriþi için gerekli kütüphane
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,19 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<DatabaseContext>(); // DatabaseContext dosyasýný bu þekilde servis olarak projeye ekliyoruz
+// Authentication : Oturum açma - giriþ yapma iþlemi
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(x =>
+{
+    x.LoginPath = "/Admin/Login"; // admin giriþ adresimiz budur dedik
+    x.Cookie.Name = "Administrator"; // oluþacak kukinin adý
+});
+
+// Authorization : giriþ yapan kullanýcýnýn nelere yetkisi var?
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminPolicy", policy => policy.RequireClaim("Role", "Admin")); // Admin kullanýcý yetkisi
+    options.AddPolicy("UserPolicy", policy => policy.RequireClaim("Role", "User")); //
+});
 // Container
 builder.Services.AddTransient(typeof(IRepository<>), typeof(Repository<>)); // Repository sýnýfýný servis olarak kullanabilmek için
 builder.Services.AddTransient(typeof(IService<>), typeof(Service<>));
@@ -38,7 +52,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthorization();
+app.UseAuthentication(); // önce UseAuthentication(kullanýcý giriþi)
+app.UseAuthorization(); // sonra UseAuthorization(yetkilendirme)
 
 app.MapControllerRoute(
             name: "admin",
