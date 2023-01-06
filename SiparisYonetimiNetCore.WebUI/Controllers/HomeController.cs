@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SiparisYonetimiNetCore.Entities;
+using SiparisYonetimiNetCore.Service.Abstract;
 using SiparisYonetimiNetCore.WebUI.Models;
 using System.Diagnostics;
 
@@ -6,16 +8,27 @@ namespace SiparisYonetimiNetCore.WebUI.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IService<Slide> _service;
+        private readonly IService<Product> _serviceProduct;
+        private readonly IService<Brand> _serviceBrand;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IService<Slide> service, IService<Product> serviceProduct, IService<Brand> serviceBrand)
         {
-            _logger = logger;
+            _service = service;
+            _serviceProduct = serviceProduct;
+            _serviceBrand = serviceBrand;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> IndexAsync()
         {
-            return View();
+            var model = new HomePageViewModel
+            {
+                Slides = await _service.GetAllAsync(),
+                Products = await _serviceProduct.GetAllAsync(),
+                Brands = await _serviceBrand.GetAllAsync()
+            };
+
+            return View(model);
         }
 
         public IActionResult Privacy()
