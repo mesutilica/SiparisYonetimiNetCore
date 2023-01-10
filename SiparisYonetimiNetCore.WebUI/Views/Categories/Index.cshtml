@@ -1,0 +1,9 @@
+﻿@model Category
+
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<h1>@Model.Name</h1>
+
+<partial name="_PartialProducts" model="Model.Products" />

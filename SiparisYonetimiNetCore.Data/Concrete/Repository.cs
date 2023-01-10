@@ -71,12 +71,12 @@ namespace SiparisYonetimiNetCore.Data.Concrete
 
         public async Task<List<T>> GetAllAsync()
         {
-            return await _dbSet.ToListAsync();
+            return await _dbSet.AsNoTracking().ToListAsync();
         }
 
         public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>> expression)
         {
-            return await _dbSet.Where(expression).ToListAsync();
+            return await _dbSet.AsNoTracking().Where(expression).ToListAsync();
         }
 
         public int SaveChanges()

@@ -1,6 +1,4 @@
 using SiparisYonetimiNetCore.Data;
-using SiparisYonetimiNetCore.Data.Abstract;
-using SiparisYonetimiNetCore.Data.Concrete;
 using SiparisYonetimiNetCore.Service.Abstract;
 using SiparisYonetimiNetCore.Service.Concrete;
 using Microsoft.AspNetCore.Authentication.Cookies; // Admin giriþi için gerekli kütüphane
@@ -25,8 +23,9 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("UserPolicy", policy => policy.RequireClaim("Role", "User")); //
 });
 // Container
-builder.Services.AddTransient(typeof(IRepository<>), typeof(Repository<>)); // Repository sýnýfýný servis olarak kullanabilmek için
+builder.Services.AddTransient(typeof(ICategoryService), typeof(CategoryService)); // Repository sýnýfýný servis olarak kullanabilmek için
 builder.Services.AddTransient(typeof(IService<>), typeof(Service<>));
+builder.Services.AddTransient<IBrandService, BrandService>(); // servis eklemek için diðer yazým tarzý
 
 //builder.Services.AddScoped
 //builder.Services.AddSingleton
