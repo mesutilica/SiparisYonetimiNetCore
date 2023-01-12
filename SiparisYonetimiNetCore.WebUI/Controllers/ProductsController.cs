@@ -18,6 +18,11 @@ namespace SiparisYonetimiNetCore.WebUI.Controllers
             var model = await _serviceProduct.GetAllAsync();
             return View(model);
         }
+        public async Task<IActionResult> Search(string Kelime) // Kelime adres çubuğundan querystring yöntemiyle gönderiliyor
+        {
+            var model = await _serviceProduct.GetAllAsync(p => p.Name.Contains(Kelime));
+            return View(model);
+        }
         public async Task<IActionResult> DetailAsync(int id)
         {
             var model = await _serviceProduct.FindAsync(id);

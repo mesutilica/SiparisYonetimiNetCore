@@ -17,16 +17,22 @@
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between m-auto">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Anasayfa</a>
                         </li>
                         @await Component.InvokeAsync("Categories")
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Contact">İletişim</a>
+                            <a class="nav-link text-dark" asp-controller="Home" asp-action="ContactUs">İletişim</a>
                         </li>
                     </ul>
+                </div>
+                <div class="col-md-3">
+                    <form asp-action="Search" asp-controller="Products" method="get" class="input-group">
+                        <input type="text" name="Kelime" class="form-control" />
+                        <input type="submit" class="btn btn-primary" value="Ara" />
+                    </form>
                 </div>
             </div>
         </nav>

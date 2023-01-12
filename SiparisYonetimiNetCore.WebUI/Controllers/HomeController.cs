@@ -11,12 +11,14 @@ namespace SiparisYonetimiNetCore.WebUI.Controllers
         private readonly IService<Slide> _service;
         private readonly IService<Product> _serviceProduct;
         private readonly IService<Brand> _serviceBrand;
+        private readonly IService<Contact> _serviceContact;
 
-        public HomeController(IService<Slide> service, IService<Product> serviceProduct, IService<Brand> serviceBrand)
+        public HomeController(IService<Slide> service, IService<Product> serviceProduct, IService<Brand> serviceBrand, IService<Contact> serviceContact)
         {
             _service = service;
             _serviceProduct = serviceProduct;
             _serviceBrand = serviceBrand;
+            _serviceContact = serviceContact;
         }
 
         public async Task<IActionResult> IndexAsync()
@@ -30,10 +32,29 @@ namespace SiparisYonetimiNetCore.WebUI.Controllers
 
             return View(model);
         }
-
-        public IActionResult Privacy()
+        [Route("iletisim")]
+        public IActionResult ContactUs()
         {
             return View();
+        }
+        [Route("iletisim"), HttpPost]
+        public async Task<IActionResult> ContactUsAsync(Contact contact)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await _serviceContact.AddAsync(contact);
+                    await _serviceContact.SaveChangesAsync();
+                    TempData["Mesaj"] = "<div class='alert alert-success'>Mesajınız Gönderildi..</div>";
+                    return RedirectToAction("ContactUs");
+                }
+                catch (Exception)
+                {
+                    ModelState.AddModelError("", "Hata Oluştu!");
+                }
+            }
+            return View(contact);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
