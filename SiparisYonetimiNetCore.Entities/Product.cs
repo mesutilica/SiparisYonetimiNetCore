@@ -2,7 +2,7 @@
 
 namespace SiparisYonetimiNetCore.Entities
 {
-    public class Product : IEntity
+    public class Slider : IEntity
     {
         public int Id { get; set; }
         [StringLength(100), Required, Display(Name = "Ürün Adı")]

@@ -27,6 +27,8 @@ builder.Services.AddTransient(typeof(ICategoryService), typeof(CategoryService))
 builder.Services.AddTransient(typeof(IService<>), typeof(Service<>));
 builder.Services.AddTransient<IBrandService, BrandService>(); // servis eklemek için diðer yazým tarzý
 
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>(); // View sayfalarýnda giriþ yapan kullanýcý bilgileri vb ye eriþebilmemizi saðlar.
+
 //builder.Services.AddScoped
 //builder.Services.AddSingleton
 

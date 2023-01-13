@@ -6,9 +6,9 @@ namespace SiparisYonetimiNetCore.WebUI.Controllers
 {
     public class ProductsController : Controller
     {
-        private readonly IService<Product> _serviceProduct;
+        private readonly IService<Slider> _serviceProduct;
 
-        public ProductsController(IService<Product> serviceProduct)
+        public ProductsController(IService<Slider> serviceProduct)
         {
             _serviceProduct = serviceProduct;
         }

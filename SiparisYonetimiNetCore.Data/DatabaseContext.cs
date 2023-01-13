@@ -9,7 +9,7 @@ namespace SiparisYonetimiNetCore.Data
         public virtual DbSet<Contact> Contacts { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
-        public virtual DbSet<Product> Products { get; set; }
+        public virtual DbSet<Slider> Products { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Slide> Slides { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) // bu metot veritabanı bağlantı ayarlarını yapabildiğimiz bir metot
