@@ -10,11 +10,11 @@ namespace SiparisYonetimiNetCore.WebUI.Areas.Admin.Controllers
     [Area("Admin"), Authorize]
     public class ProductsController : Controller
     {
-        private readonly IService<Slider> _service;
+        private readonly IService<Product> _service;
         private readonly IService<Category> _serviceCategory;
         private readonly IService<Brand> _serviceBrand;
 
-        public ProductsController(IService<Slider> service, IService<Category> serviceCategory, IService<Brand> serviceBrand)
+        public ProductsController(IService<Product> service, IService<Category> serviceCategory, IService<Brand> serviceBrand)
         {
             _service = service;
             _serviceCategory = serviceCategory;
@@ -45,7 +45,7 @@ namespace SiparisYonetimiNetCore.WebUI.Areas.Admin.Controllers
         // POST: ProductsController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> CreateAsync(Slider product, IFormFile? Image)
+        public async Task<ActionResult> CreateAsync(Product product, IFormFile? Image)
         {
             if (ModelState.IsValid)
             {
@@ -78,7 +78,7 @@ namespace SiparisYonetimiNetCore.WebUI.Areas.Admin.Controllers
         // POST: ProductsController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> EditAsync(int id, Slider product, IFormFile? Image)
+        public async Task<ActionResult> EditAsync(int id, Product product, IFormFile? Image)
         {
             if (ModelState.IsValid)
             {
@@ -109,7 +109,7 @@ namespace SiparisYonetimiNetCore.WebUI.Areas.Admin.Controllers
         // POST: ProductsController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteAsync(int id, Slider product)
+        public async Task<ActionResult> DeleteAsync(int id, Product product)
         {
             try
             {

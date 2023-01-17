@@ -6,32 +6,32 @@ namespace SiparisYonetimiNetCore.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductsController : ControllerBase
+    public class UsersController : ControllerBase
     {
-        private readonly IService<Product> _service;
+        private readonly IService<User> _service;
 
-        public ProductsController(IService<Product> service)
+        public UsersController(IService<User> service)
         {
             _service = service;
         }
 
-        // GET: api/<ProductsController>
+        // GET: api/<UsersController>
         [HttpGet]
-        public async Task<IEnumerable<Product>> Get()
+        public async Task<IEnumerable<User>> Get()
         {
             return await _service.GetAllAsync();
         }
 
-        // GET api/<ProductsController>/5
+        // GET api/<UsersController>/5
         [HttpGet("{id}")]
-        public async Task<Product> Get(int id)
+        public async Task<User> Get(int id)
         {
             return await _service.FindAsync(id);
         }
 
-        // POST api/<ProductsController>
+        // POST api/<UsersController>
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] Product entity)
+        public async Task<ActionResult> Post([FromBody] User entity)
         {
             await _service.AddAsync(entity);
             await _service.SaveChangesAsync();
@@ -39,9 +39,9 @@ namespace SiparisYonetimiNetCore.WebAPI.Controllers
             return CreatedAtAction("Get", new { id = entity.Id }, entity);
         }
 
-        // PUT api/<ProductsController>/5
+        // PUT api/<UsersController>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, [FromBody] Product entity)
+        public async Task<ActionResult> Put(int id, [FromBody] User entity)
         {
             _service.Update(entity);
             var sonuc = await _service.SaveChangesAsync();
@@ -49,7 +49,7 @@ namespace SiparisYonetimiNetCore.WebAPI.Controllers
             return StatusCode(StatusCodes.Status304NotModified);
         }
 
-        // DELETE api/<ProductsController>/5
+        // DELETE api/<UsersController>/5
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {

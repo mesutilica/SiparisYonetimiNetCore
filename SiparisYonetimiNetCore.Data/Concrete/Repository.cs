@@ -1,12 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SiparisYonetimiNetCore.Data.Abstract;
 using SiparisYonetimiNetCore.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SiparisYonetimiNetCore.Data.Concrete
 {
@@ -26,7 +21,7 @@ namespace SiparisYonetimiNetCore.Data.Concrete
 
         public async Task AddAsync(T entity)
         {
-           await _context.AddAsync(entity);
+            await _context.AddAsync(entity);
         }
 
         public void Delete(T entity)

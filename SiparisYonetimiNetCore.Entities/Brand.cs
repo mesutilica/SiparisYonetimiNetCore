@@ -15,6 +15,6 @@ namespace SiparisYonetimiNetCore.Entities
         public bool IsActive { get; set; }
         [Display(Name = "Eklenme Tarihi"), ScaffoldColumn(false)] // view larda bu kolon oluşmasın!
         public DateTime? CreateDate { get; set; } = DateTime.Now;
-        public virtual List<Slider>? Products { get; set; }
+        public virtual List<Product>? Products { get; set; }
     }
 }

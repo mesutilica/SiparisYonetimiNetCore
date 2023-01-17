@@ -9,11 +9,11 @@ namespace SiparisYonetimiNetCore.WebUI.Controllers
     public class HomeController : Controller
     {
         private readonly IService<Slide> _service;
-        private readonly IService<Slider> _serviceProduct;
+        private readonly IService<Product> _serviceProduct;
         private readonly IService<Brand> _serviceBrand;
         private readonly IService<Contact> _serviceContact;
 
-        public HomeController(IService<Slide> service, IService<Slider> serviceProduct, IService<Brand> serviceBrand, IService<Contact> serviceContact)
+        public HomeController(IService<Slide> service, IService<Product> serviceProduct, IService<Brand> serviceBrand, IService<Contact> serviceContact)
         {
             _service = service;
             _serviceProduct = serviceProduct;

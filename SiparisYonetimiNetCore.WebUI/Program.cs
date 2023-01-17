@@ -1,7 +1,7 @@
+using Microsoft.AspNetCore.Authentication.Cookies; // Admin giriþi için gerekli kütüphane
 using SiparisYonetimiNetCore.Data;
 using SiparisYonetimiNetCore.Service.Abstract;
 using SiparisYonetimiNetCore.Service.Concrete;
-using Microsoft.AspNetCore.Authentication.Cookies; // Admin giriþi için gerekli kütüphane
 
 var builder = WebApplication.CreateBuilder(args);
 

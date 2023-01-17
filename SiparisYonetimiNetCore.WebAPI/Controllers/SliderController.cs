@@ -2,45 +2,63 @@
 using SiparisYonetimiNetCore.Entities;
 using SiparisYonetimiNetCore.Service.Abstract;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace SiparisYonetimiNetCore.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class SliderController : ControllerBase
     {
-        private readonly IService<Slider> _service;
-        // GET: api/<SliderController>
+        private readonly IService<Slide> _service;
+
+        public SliderController(IService<Slide> service)
+        {
+            _service = service;
+        }
+
+        // GET: api/<ProductsController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<IEnumerable<Slide>> Get()
         {
-            return new string[] { "value1", "value2" };
+            return await _service.GetAllAsync();
         }
 
-        // GET api/<SliderController>/5
+        // GET api/<ProductsController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<Slide> Get(int id)
         {
-            return "value";
+            return await _service.FindAsync(id);
         }
 
-        // POST api/<SliderController>
+        // POST api/<ProductsController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult> Post([FromBody] Slide entity)
         {
+            await _service.AddAsync(entity);
+            await _service.SaveChangesAsync();
+
+            return CreatedAtAction("Get", new { id = entity.Id }, entity);
         }
 
-        // PUT api/<SliderController>/5
+        // PUT api/<ProductsController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<ActionResult> Put(int id, [FromBody] Slide entity)
         {
+            _service.Update(entity);
+            var sonuc = await _service.SaveChangesAsync();
+            if (sonuc > 0) return NoContent();
+            return StatusCode(StatusCodes.Status304NotModified);
         }
 
-        // DELETE api/<SliderController>/5
+        // DELETE api/<ProductsController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
+            var kayit = await _service.FindAsync(id);
+            if (kayit == null) return BadRequest();
+            _service.Delete(kayit);
+            var sonuc = await _service.SaveChangesAsync();
+            if (sonuc > 0) return NoContent();
+            return StatusCode(StatusCodes.Status304NotModified);
         }
     }
 }

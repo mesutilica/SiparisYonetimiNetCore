@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "SiparisYonetimiNetCore.Data": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:63880;http://localhost:63881"
+    }
+  }
+}
