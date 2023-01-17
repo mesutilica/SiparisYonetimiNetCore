@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SiparisYonetimiNetCore.Entities;
-using SiparisYonetimiNetCore.Service.Abstract;
 using SiparisYonetimiNetCore.WebUI.Utils;
 
 namespace SiparisYonetimiNetCore.WebUI.Areas.Admin.Controllers
@@ -9,7 +8,6 @@ namespace SiparisYonetimiNetCore.WebUI.Areas.Admin.Controllers
     [Area("Admin"), Authorize(Policy = "AdminPolicy")]
     public class BrandsController : Controller
     {
-        private readonly IService<Brand> _service;
         private readonly HttpClient _httpClient;
         private readonly string _apiAdres;
 
@@ -48,9 +46,10 @@ namespace SiparisYonetimiNetCore.WebUI.Areas.Admin.Controllers
                 try
                 {
                     if (Logo is not null) brand.Logo = await FileHelper.FileLoaderAsync(Logo);
-                    await _service.AddAsync(brand);
-                    await _service.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
+                    var response = await _httpClient.PostAsJsonAsync(_apiAdres, brand);
+                    
+                    if(response.IsSuccessStatusCode) return RedirectToAction(nameof(Index));
+                    else ModelState.AddModelError("", "Kayıt Başarısız!");
                 }
                 catch
                 {
@@ -61,9 +60,9 @@ namespace SiparisYonetimiNetCore.WebUI.Areas.Admin.Controllers
         }
 
         // GET: BrandsController/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> EditAsync(int id)
         {
-            var model = _service.Find(id);
+            var model = await _httpClient.GetFromJsonAsync<Brand>($"{_apiAdres}/{id}");
             return View(model);
         }
 
@@ -77,8 +76,7 @@ namespace SiparisYonetimiNetCore.WebUI.Areas.Admin.Controllers
                 try
                 {
                     if (Logo is not null) brand.Logo = await FileHelper.FileLoaderAsync(Logo);
-                    _service.Update(brand);
-                    await _service.SaveChangesAsync();
+                    var response = await _httpClient.PutAsJsonAsync(_apiAdres + "/" + id, brand);
                     return RedirectToAction(nameof(Index));
                 }
                 catch
@@ -90,27 +88,27 @@ namespace SiparisYonetimiNetCore.WebUI.Areas.Admin.Controllers
         }
 
         // GET: BrandsController/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> DeleteAsync(int id)
         {
-            var model = _service.Find(id);
+            var model = await _httpClient.GetFromJsonAsync<Brand>($"{_apiAdres}/{id}");
             return View(model);
         }
 
         // POST: BrandsController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, Brand brand)
+        public async Task<ActionResult> DeleteAsync(int id, Brand brand)
         {
             try
             {
-                _service.Delete(brand);
-                _service.SaveChanges();
+                var response = await _httpClient.DeleteAsync($"{_apiAdres}/{id}");
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View();
+                ModelState.AddModelError("", "Hata Oluştu!");
             }
+            return View(brand);
         }
     }
 }
