@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SiparisYonetimiNetCore.Data
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SiparisYonetimiNetCore.Service", "SiparisYonetimiNetCore.Service\SiparisYonetimiNetCore.Service.csproj", "{12164BB9-76B7-4195-B03F-9C5802CEF3F7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SiparisYonetimiNetCore.WebAPI", "SiparisYonetimiNetCore.WebAPI\SiparisYonetimiNetCore.WebAPI.csproj", "{BEDCB15A-3053-43AB-BD7C-64D1D8965E7A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SiparisYonetimiNetCore.WebAPI", "SiparisYonetimiNetCore.WebAPI\SiparisYonetimiNetCore.WebAPI.csproj", "{BEDCB15A-3053-43AB-BD7C-64D1D8965E7A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SiparisYonetimiNetCore.WebAPIUsing", "SiparisYonetimiNetCore.WebAPIUsing\SiparisYonetimiNetCore.WebAPIUsing.csproj", "{481F773F-A8D4-4B00-8D1F-3EBAD1D2680E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{BEDCB15A-3053-43AB-BD7C-64D1D8965E7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BEDCB15A-3053-43AB-BD7C-64D1D8965E7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BEDCB15A-3053-43AB-BD7C-64D1D8965E7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{481F773F-A8D4-4B00-8D1F-3EBAD1D2680E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{481F773F-A8D4-4B00-8D1F-3EBAD1D2680E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{481F773F-A8D4-4B00-8D1F-3EBAD1D2680E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{481F773F-A8D4-4B00-8D1F-3EBAD1D2680E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
