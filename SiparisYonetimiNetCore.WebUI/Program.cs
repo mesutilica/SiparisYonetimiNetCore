@@ -26,6 +26,7 @@ builder.Services.AddAuthorization(options =>
 builder.Services.AddTransient(typeof(ICategoryService), typeof(CategoryService)); // Repository sýnýfýný servis olarak kullanabilmek için
 builder.Services.AddTransient(typeof(IService<>), typeof(Service<>));
 builder.Services.AddTransient<IBrandService, BrandService>(); // servis eklemek için diðer yazým tarzý
+builder.Services.AddTransient<IProductService, ProductService>();
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>(); // View sayfalarýnda giriþ yapan kullanýcý bilgileri vb ye eriþebilmemizi saðlar.
 

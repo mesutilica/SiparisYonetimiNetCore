@@ -8,17 +8,19 @@ namespace SiparisYonetimiNetCore.WebUI.Areas.Admin.Controllers
     [Area("Admin"), Authorize]
     public class ContactsController : Controller
     {
-        private readonly IService<Contact> _service;
+        private readonly HttpClient _httpClient;
+        private readonly string _apiAdres;
 
-        public ContactsController(IService<Contact> service)
+        public ContactsController(HttpClient httpClient)
         {
-            _service = service;
+            _httpClient = httpClient;
+            _apiAdres = "https://localhost:7005/api/Contacts";
         }
 
         // GET: ContactsController
         public async Task<ActionResult> Index()
         {
-            var model = await _service.GetAllAsync();
+            var model = await _httpClient.GetFromJsonAsync<List<Contact>>(_apiAdres);
             return View(model);
         }
 
@@ -43,9 +45,9 @@ namespace SiparisYonetimiNetCore.WebUI.Areas.Admin.Controllers
             {
                 try
                 {
-                    await _service.AddAsync(contact);
-                    await _service.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
+                    var response = await _httpClient.PostAsJsonAsync(_apiAdres, contact);
+                    if (response.IsSuccessStatusCode) return RedirectToAction(nameof(Index));
+                    else ModelState.AddModelError("", "Kayıt Başarısız!");
                 }
                 catch
                 {
@@ -56,9 +58,9 @@ namespace SiparisYonetimiNetCore.WebUI.Areas.Admin.Controllers
         }
 
         // GET: ContactsController/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> EditAsync(int id)
         {
-            var model = _service.Find(id);
+            var model = await _httpClient.GetFromJsonAsync<Contact>($"{_apiAdres}/{id}");
             return View(model);
         }
 
@@ -71,8 +73,7 @@ namespace SiparisYonetimiNetCore.WebUI.Areas.Admin.Controllers
             {
                 try
                 {
-                    _service.Update(contact);
-                    await _service.SaveChangesAsync();
+                    var response = await _httpClient.PutAsJsonAsync(_apiAdres + "/" + id, contact);
                     return RedirectToAction(nameof(Index));
                 }
                 catch
@@ -84,21 +85,20 @@ namespace SiparisYonetimiNetCore.WebUI.Areas.Admin.Controllers
         }
 
         // GET: ContactsController/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> DeleteAsync(int id)
         {
-            var model = _service.Find(id);
+            var model = await _httpClient.GetFromJsonAsync<Contact>($"{_apiAdres}/{id}");
             return View(model);
         }
 
         // POST: ContactsController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, Contact contact)
+        public async Task<ActionResult> DeleteAsync(int id, Contact contact)
         {
             try
             {
-                _service.Delete(contact);
-                _service.SaveChanges();
+                var response = await _httpClient.DeleteAsync($"{_apiAdres}/{id}");
                 return RedirectToAction(nameof(Index));
             }
             catch

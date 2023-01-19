@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Azure;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SiparisYonetimiNetCore.Entities;
 using SiparisYonetimiNetCore.Service.Abstract;
@@ -9,16 +10,19 @@ namespace SiparisYonetimiNetCore.WebUI.Areas.Admin.Controllers
     public class CustomersController : Controller
     {
         private readonly IService<Customer> _service;
+        private readonly HttpClient _httpClient;
+        private readonly string _apiAdres;
 
-        public CustomersController(IService<Customer> service)
+        public CustomersController(HttpClient httpClient)
         {
-            _service = service;
+            _httpClient = httpClient;
+            _apiAdres = "https://localhost:7005/api/Customers";
         }
 
         // GET: CustomersController
         public async Task<ActionResult> Index()
         {
-            var model = await _service.GetAllAsync();
+            var model = await _httpClient.GetFromJsonAsync<List<Customer>>(_apiAdres);
             return View(model);
         }
 
@@ -43,9 +47,9 @@ namespace SiparisYonetimiNetCore.WebUI.Areas.Admin.Controllers
             {
                 try
                 {
-                    await _service.AddAsync(customer);
-                    await _service.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
+                    var response = await _httpClient.PostAsJsonAsync(_apiAdres, customer);
+                    if (response.IsSuccessStatusCode) return RedirectToAction(nameof(Index));
+                    else ModelState.AddModelError("", "Kayıt Başarısız!");
                 }
                 catch
                 {
@@ -56,9 +60,9 @@ namespace SiparisYonetimiNetCore.WebUI.Areas.Admin.Controllers
         }
 
         // GET: CustomersController/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> EditAsync(int id)
         {
-            var model = _service.Find(id);
+            var model = await _httpClient.GetFromJsonAsync<Customer>($"{_apiAdres}/{id}");
             return View(model);
         }
 
@@ -71,9 +75,8 @@ namespace SiparisYonetimiNetCore.WebUI.Areas.Admin.Controllers
             {
                 try
                 {
-                    _service.Update(customer);
-                    await _service.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
+                    var response = await _httpClient.PutAsJsonAsync(_apiAdres + "/" + id, customer);
+                    if (response.IsSuccessStatusCode) return RedirectToAction(nameof(Index));
                 }
                 catch
                 {
@@ -84,27 +87,27 @@ namespace SiparisYonetimiNetCore.WebUI.Areas.Admin.Controllers
         }
 
         // GET: CustomersController/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> DeleteAsync(int id)
         {
-            var model = _service.Find(id);
+            var model = await _httpClient.GetFromJsonAsync<Customer>($"{_apiAdres}/{id}");
             return View(model);
         }
 
         // POST: CustomersController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, Customer customer)
+        public async Task<ActionResult> DeleteAsync(int id, Customer customer)
         {
             try
             {
-                _service.Delete(customer);
-                _service.SaveChanges();
-                return RedirectToAction(nameof(Index));
+                var response = await _httpClient.DeleteAsync($"{_apiAdres}/{id}");
+                if(response.IsSuccessStatusCode) return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View();
+                ModelState.AddModelError("", "Hata Oluştu!");
             }
+            return View(customer);
         }
     }
 }

@@ -1,25 +1,26 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SiparisYonetimiNetCore.Entities;
-using SiparisYonetimiNetCore.Service.Abstract;
 
 namespace SiparisYonetimiNetCore.WebUI.Areas.Admin.Controllers
 {
     [Area("Admin"), Authorize]
     public class CategoriesController : Controller
     {
-        private readonly IService<Category> _service;
+        private readonly HttpClient _httpClient;
+        private readonly string _apiAdres;
 
-        public CategoriesController(IService<Category> service)
+        public CategoriesController(HttpClient httpClient)
         {
-            _service = service;
+            _httpClient = httpClient;
+            _apiAdres = "https://localhost:7005/api/Categories";
         }
-
+        
         // GET: CategoriesController
         public async Task<ActionResult> Index()
         {
-            var model = await _service.GetAllAsync();
-            return View(model);
+            var request = await _httpClient.GetFromJsonAsync<List<Category>>(_apiAdres);
+            return View(request);
         }
 
         // GET: CategoriesController/Details/5
@@ -43,9 +44,9 @@ namespace SiparisYonetimiNetCore.WebUI.Areas.Admin.Controllers
             {
                 try
                 {
-                    await _service.AddAsync(category);
-                    await _service.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
+                    var response = await _httpClient.PostAsJsonAsync(_apiAdres, category);
+                    if (response.IsSuccessStatusCode) return RedirectToAction(nameof(Index));
+                    else ModelState.AddModelError("", "Kayıt Başarısız!");
                 }
                 catch
                 {
@@ -56,9 +57,9 @@ namespace SiparisYonetimiNetCore.WebUI.Areas.Admin.Controllers
         }
 
         // GET: CategoriesController/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> EditAsync(int id)
         {
-            var model = _service.Find(id);
+            var model = await _httpClient.GetFromJsonAsync<Category>($"{_apiAdres}/{id}");
             return View(model);
         }
 
@@ -71,8 +72,7 @@ namespace SiparisYonetimiNetCore.WebUI.Areas.Admin.Controllers
             {
                 try
                 {
-                    _service.Update(category);
-                    await _service.SaveChangesAsync();
+                    var response = await _httpClient.PutAsJsonAsync(_apiAdres + "/" + id, category);
                     return RedirectToAction(nameof(Index));
                 }
                 catch
@@ -84,21 +84,20 @@ namespace SiparisYonetimiNetCore.WebUI.Areas.Admin.Controllers
         }
 
         // GET: CategoriesController/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> DeleteAsync(int id)
         {
-            var model = _service.Find(id);
+            var model = await _httpClient.GetFromJsonAsync<Category>($"{_apiAdres}/{id}");
             return View(model);
         }
 
         // POST: CategoriesController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, Category category)
+        public async Task<ActionResult> DeleteAsync(int id, Category category)
         {
             try
             {
-                _service.Delete(category);
-                _service.SaveChanges();
+                var response = await _httpClient.DeleteAsync($"{_apiAdres}/{id}");
                 return RedirectToAction(nameof(Index));
             }
             catch

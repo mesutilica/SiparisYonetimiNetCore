@@ -47,7 +47,6 @@ namespace SiparisYonetimiNetCore.WebUI.Areas.Admin.Controllers
                 {
                     if (Logo is not null) brand.Logo = await FileHelper.FileLoaderAsync(Logo);
                     var response = await _httpClient.PostAsJsonAsync(_apiAdres, brand);
-                    
                     if(response.IsSuccessStatusCode) return RedirectToAction(nameof(Index));
                     else ModelState.AddModelError("", "Kayıt Başarısız!");
                 }

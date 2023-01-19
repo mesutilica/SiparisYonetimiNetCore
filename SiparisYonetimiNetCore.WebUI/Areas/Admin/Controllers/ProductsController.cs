@@ -13,18 +13,20 @@ namespace SiparisYonetimiNetCore.WebUI.Areas.Admin.Controllers
         private readonly IService<Product> _service;
         private readonly IService<Category> _serviceCategory;
         private readonly IService<Brand> _serviceBrand;
+        private readonly IProductService _ProductService;
 
-        public ProductsController(IService<Product> service, IService<Category> serviceCategory, IService<Brand> serviceBrand)
+        public ProductsController(IService<Product> service, IService<Category> serviceCategory, IService<Brand> serviceBrand, IProductService productService)
         {
             _service = service;
             _serviceCategory = serviceCategory;
             _serviceBrand = serviceBrand;
+            _ProductService = productService;
         }
 
         // GET: ProductsController
         public async Task<ActionResult> Index()
         {
-            var model = await _service.GetAllAsync();
+            var model = await _ProductService.GetProductsByCategoryAndBrandAsync();
             return View(model);
         }
 

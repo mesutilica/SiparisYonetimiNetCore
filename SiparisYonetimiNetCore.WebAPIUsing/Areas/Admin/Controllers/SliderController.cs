@@ -9,17 +9,19 @@ namespace SiparisYonetimiNetCore.WebUI.Areas.Admin.Controllers
     [Area("Admin"), Authorize]
     public class SliderController : Controller
     {
-        private readonly IService<Slide> _service;
+        private readonly HttpClient _httpClient;
+        private readonly string _apiAdres;
 
-        public SliderController(IService<Slide> service)
+        public SliderController(HttpClient httpClient)
         {
-            _service = service;
+            _httpClient = httpClient;
+            _apiAdres = "https://localhost:7005/api/Slider";
         }
 
         // GET: SliderController
         public async Task<ActionResult> Index()
         {
-            var model = await _service.GetAllAsync();
+            var model = await _httpClient.GetFromJsonAsync<List<Slide>>(_apiAdres);
             return View(model);
         }
 
@@ -45,9 +47,9 @@ namespace SiparisYonetimiNetCore.WebUI.Areas.Admin.Controllers
                 try
                 {
                     if (Image is not null) slide.Image = await FileHelper.FileLoaderAsync(Image);
-                    await _service.AddAsync(slide);
-                    await _service.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
+                    var response = await _httpClient.PostAsJsonAsync(_apiAdres, slide);
+                    if (response.IsSuccessStatusCode) return RedirectToAction(nameof(Index));
+                    else ModelState.AddModelError("", "Kayıt Başarısız!");
                 }
                 catch
                 {
@@ -60,7 +62,7 @@ namespace SiparisYonetimiNetCore.WebUI.Areas.Admin.Controllers
         // GET: SliderController/Edit/5
         public async Task<ActionResult> EditAsync(int id)
         {
-            var model = await _service.FindAsync(id);
+            var model = await _httpClient.GetFromJsonAsync<Slide>($"{_apiAdres}/{id}");
             return View(model);
         }
 
@@ -74,8 +76,7 @@ namespace SiparisYonetimiNetCore.WebUI.Areas.Admin.Controllers
                 try
                 {
                     if (Image is not null) slide.Image = await FileHelper.FileLoaderAsync(Image);
-                    _service.Update(slide);
-                    await _service.SaveChangesAsync();
+                    var response = await _httpClient.PutAsJsonAsync(_apiAdres + "/" + id, slide);
                     return RedirectToAction(nameof(Index));
                 }
                 catch
@@ -89,26 +90,26 @@ namespace SiparisYonetimiNetCore.WebUI.Areas.Admin.Controllers
         // GET: SliderController/Delete/5
         public async Task<ActionResult> DeleteAsync(int id)
         {
-            var model = await _service.FindAsync(id);
+            var model = await _httpClient.GetFromJsonAsync<Slide>($"{_apiAdres}/{id}");
             return View(model);
         }
 
         // POST: SliderController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, Slide slide)
+        public async Task<ActionResult> DeleteAsync(int id, Slide slide)
         {
             try
             {
-                _service.Delete(slide);
-                _service.SaveChanges();
-                FileHelper.FileRemover(slide.Image);
+                var response = await _httpClient.DeleteAsync($"{_apiAdres}/{id}"); // response = cevap
+                if (response.IsSuccessStatusCode) FileHelper.FileRemover(slide.Image); // IsSuccess = başarılıysa
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View();
+                ModelState.AddModelError("", "Hata Oluştu!");
             }
+            return View(slide);
         }
     }
 }

@@ -9,17 +9,19 @@ namespace SiparisYonetimiNetCore.WebAPI.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly IService<Product> _service;
+        private readonly IProductService _ProductService;
 
-        public ProductsController(IService<Product> service)
+        public ProductsController(IService<Product> service, IProductService productService)
         {
             _service = service;
+            _ProductService = productService;
         }
 
         // GET: api/<ProductsController>
         [HttpGet]
         public async Task<IEnumerable<Product>> Get()
         {
-            return await _service.GetAllAsync();
+            return await _ProductService.GetProductsByCategoryAndBrandAsync();
         }
 
         // GET api/<ProductsController>/5
