@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SiparisYonetimiNetCore.Entities;
-using SiparisYonetimiNetCore.Service.Abstract;
 using SiparisYonetimiNetCore.WebUI.Utils;
 
 namespace SiparisYonetimiNetCore.WebUI.Areas.Admin.Controllers

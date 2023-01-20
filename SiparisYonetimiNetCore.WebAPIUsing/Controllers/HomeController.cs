@@ -1,21 +1,30 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SiparisYonetimiNetCore.Entities;
 using SiparisYonetimiNetCore.WebAPIUsing.Models;
+using SiparisYonetimiNetCore.WebUI.Models;
 using System.Diagnostics;
 
 namespace SiparisYonetimiNetCore.WebAPIUsing.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly HttpClient _httpClient;
+        private readonly string _apiAdres = "https://localhost:7005/api/";
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(HttpClient httpClient)
         {
-            _logger = logger;
+            _httpClient = httpClient;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> IndexAsync()
         {
-            return View();
+            var model = new HomePageViewModel
+            {
+                Slides = await _httpClient.GetFromJsonAsync<List<Slide>>(_apiAdres + "Slider"),
+                Products = await _httpClient.GetFromJsonAsync<List<Product>>(_apiAdres + "Products"),
+                Brands = await _httpClient.GetFromJsonAsync<List<Brand>>(_apiAdres + "Brands")
+            };
+            return View(model);
         }
 
         public IActionResult Privacy()

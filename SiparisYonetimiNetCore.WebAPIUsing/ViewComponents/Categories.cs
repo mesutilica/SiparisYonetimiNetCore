@@ -1,21 +1,23 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SiparisYonetimiNetCore.Entities;
-using SiparisYonetimiNetCore.Service.Abstract;
 
 namespace SiparisYonetimiNetCore.WebUI.ViewComponents
 {
     public class Categories : ViewComponent
     {
-        private readonly IService<Category> _service;
+        private readonly HttpClient _httpClient;
+        private readonly string _apiAdres;
 
-        public Categories(IService<Category> service)
+        public Categories(HttpClient httpClient)
         {
-            _service = service;
+            _httpClient = httpClient;
+            _apiAdres = "https://localhost:7005/api/Categories";
         }
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            return View(await _service.GetAllAsync(c => c.IsActive));
+            var request = await _httpClient.GetFromJsonAsync<List<Category>>(_apiAdres);
+            return View(request);
         }
     }
 }

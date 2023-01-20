@@ -8,9 +8,9 @@ namespace SiparisYonetimiNetCore.WebAPI.Controllers
     [ApiController]
     public class CategoriesController : ControllerBase
     {
-        private readonly IService<Category> _service;
+        private readonly ICategoryService _service;
 
-        public CategoriesController(IService<Category> service)
+        public CategoriesController(ICategoryService service)
         {
             _service = service;
         }
@@ -24,7 +24,7 @@ namespace SiparisYonetimiNetCore.WebAPI.Controllers
         [HttpGet("{id}")]
         public async Task<Category> Get(int id)
         {
-            return await _service.FindAsync(id);
+            return await _service.GetCategoryByProducts(id);
         }
 
         [HttpPost]

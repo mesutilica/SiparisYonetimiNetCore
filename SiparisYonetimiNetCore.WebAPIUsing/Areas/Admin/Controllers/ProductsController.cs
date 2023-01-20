@@ -2,9 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using SiparisYonetimiNetCore.Entities;
-using SiparisYonetimiNetCore.Service.Abstract;
 using SiparisYonetimiNetCore.WebUI.Utils;
-using System.Drawing;
 
 namespace SiparisYonetimiNetCore.WebUI.Areas.Admin.Controllers
 {
